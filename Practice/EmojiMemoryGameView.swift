@@ -1,6 +1,7 @@
 import SwiftUI
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
+    var viewModel: EmojiMemoryGame
     @State var selectedTab: Int = 0
       let emojis:[String] = ["🚴", "🥊", "⚽️", "🎾", "🏊", "🏄‍♂️", "🤽‍♀️", "🤼‍♂️", "🤺", "🏎️", "🥋", "🏌️‍♂️"]
       let emojis_2:[String] = ["⚰️","🪄","🔮","🧿","🦄","🍭","🧙","🧌"]
@@ -33,14 +34,12 @@ struct ContentView: View {
                 NavigationStack {
                     ScrollView {
                         LazyVGrid(columns: [
-                            GridItem(.flexible(minimum: 64)),
-                            GridItem(.flexible(minimum: 64)),
-                            GridItem(.flexible(minimum: 64)),
-                            GridItem(.flexible(minimum: 64))
-                        ]) {
+                            GridItem(.adaptive(minimum: 100), spacing: 0)
+                        ], spacing: 0) {
                             ForEach(emojis_cur[0..<emojis_cur.count], id: \.self) { emoji in
                                 CardView(content: emoji)
                                     .aspectRatio(2/3, contentMode: .fit)
+                                    .padding(5)
                             }
                         }
                     }
@@ -118,8 +117,9 @@ struct ContentView: View {
                         .foregroundColor(.purple)
                     
                     Text(content)
-                        .font(.largeTitle)
-                    
+                        .font(.system(size: 50))
+                        .minimumScaleFactor(0.01)
+                        .aspectRatio(1, contentMode: .fit)
                 }
                 .opacity(isFaceUp ? 1:0)
                 base
@@ -157,6 +157,6 @@ struct ThemeView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        EmojiMemoryGameView(viewModel: EmojiMemoryGame())
     }
 }
