@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
-    var viewModel: EmojiMemoryGame
+    @ObservedObject  var viewModel: EmojiMemoryGame
     @State var selectedTab: Int = 0
-      let emojis:[String] = ["🚴", "🥊", "⚽️", "🎾", "🏊", "🏄‍♂️", "🤽‍♀️", "🤼‍♂️", "🤺", "🏎️", "🥋", "🏌️‍♂️"]
-      let emojis_2:[String] = ["⚰️","🪄","🔮","🧿","🦄","🍭","🧙","🧌"]
-      let emojis_3:[String] = ["🤣", "🥺", "😇", "😅", "😫", "😏", "🥶", "🥵", "😡", "🤯", "🤗", "😭",
-                                            "😎", "🤓"]
+    let emojis:[String] = ["🚴", "🥊", "⚽️", "🎾", "🏊", "🏄‍♂️", "🤽‍♀️", "🤼‍♂️", "🤺", "🏎️", "🥋", "🏌️‍♂️"]
+    let emojis_2:[String] = ["⚰️","🪄","🔮","🧿","🦄","🍭","🧙","🧌"]
+    let emojis_3:[String] = ["🤣", "🥺", "😇", "😅", "😫", "😏", "🥶", "🥵", "😡", "🤯", "🤗", "😭",
+                             "😎", "🤓"]
     @State private var emojis_cur:[String] = ["🚴", "🥊", "⚽️", "🎾", "🏊", "🏄‍♂️", "🤽‍♀️", "🤼‍♂️", "🤺", "🏎️", "🥋", "🏌️‍♂️"]
     @State var cardCount = 10
     var body: some View {
@@ -28,16 +28,16 @@ struct EmojiMemoryGameView: View {
                             )
                         )
                         .fontWeight(.heavy)
-                        
-                        
+                    
+                    
                 }
                 NavigationStack {
                     ScrollView {
                         LazyVGrid(columns: [
                             GridItem(.adaptive(minimum: 100), spacing: 0)
                         ], spacing: 0) {
-                            ForEach(emojis_cur[0..<emojis_cur.count], id: \.self) { emoji in
-                                CardView(content: emoji)
+                            ForEach(viewModel.cards.indices, id: \.self) { emoji in
+                                CardView(viewModel.cards[emoji])
                                     .aspectRatio(2/3, contentMode: .fit)
                                     .padding(5)
                             }
@@ -47,9 +47,9 @@ struct EmojiMemoryGameView: View {
                 
                 HStack {
                     Spacer()
-
+                    
                     Button(action: {
-                        emojis_cur = emojis.shuffled()  // Switch to FirstView
+                        viewModel.shuffle()  // Switch to FirstView
                         let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred() // Trigger the haptic feedback
                     }) {
@@ -91,7 +91,7 @@ struct EmojiMemoryGameView: View {
                     .buttonStyle(BorderlessButtonStyle())
                     
                     Spacer()
-
+                    
                 }.padding()
                 
             }
@@ -100,12 +100,14 @@ struct EmojiMemoryGameView: View {
         
     }
     
-}
-   struct CardView: View {
-        let content: String
-        @State var isFaceUp = true
-       @State var base = RoundedRectangle(cornerRadius: 12)
+    
+    struct CardView: View {
+        let card: MemoryGame<String>.Card
+        @State var base = RoundedRectangle(cornerRadius: 12)
         
+        init(_ card: MemoryGame<String>.Card) {
+            self.card = card
+        }
         var body: some View {
             ZStack {
                 Group {
@@ -116,46 +118,43 @@ struct EmojiMemoryGameView: View {
                         .strokeBorder(lineWidth: 8)
                         .foregroundColor(.purple)
                     
-                    Text(content)
+                    Text(card.content)
                         .font(.system(size: 50))
                         .minimumScaleFactor(0.01)
                         .aspectRatio(1, contentMode: .fit)
                 }
-                .opacity(isFaceUp ? 1:0)
+                .opacity(card.isFaceUp ? 1:0)
                 base
                     .fill()
-                    .opacity(isFaceUp ? 0:1)
+                    .opacity(card.isFaceUp ? 0:1)
                     .foregroundColor(.purple)
             }
             .frame(width: 80, height:100)
-            .animation(.easeInOut, value: isFaceUp)
-            .onTapGesture {
-                isFaceUp.toggle()
-                
-            }
+            .animation(.easeInOut, value: card.isFaceUp)
+            
         }
     }
-struct ThemeView: View {
-    
-    let themeImage: String
-    let themeName: String
-    
-    var body: some View {
-        VStack {
-            Image(systemName: themeImage)
-                .font(.system(size: 24))
-                .foregroundColor(.accentColor)
-            
-            Text(themeName)
-                .font(.system(size: 18))
-                .bold()
-                .foregroundColor(.blue)
+    struct ThemeView: View {
+        
+        let themeImage: String
+        let themeName: String
+        
+        var body: some View {
+            VStack {
+                Image(systemName: themeImage)
+                    .font(.system(size: 24))
+                    .foregroundColor(.accentColor)
+                
+                Text(themeName)
+                    .font(.system(size: 18))
+                    .bold()
+                    .foregroundColor(.blue)
+            }
         }
     }
 }
 
-
-struct ContentView_Previews: PreviewProvider {
+struct EmojiMemoryGameView_Previews: PreviewProvider {
     static var previews: some View {
         EmojiMemoryGameView(viewModel: EmojiMemoryGame())
     }
