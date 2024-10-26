@@ -36,15 +36,20 @@ struct EmojiMemoryGameView: View {
                         LazyVGrid(columns: [
                             GridItem(.adaptive(minimum: 100), spacing: 0)
                         ], spacing: 0) {
-                            ForEach(viewModel.cards.indices, id: \.self) { emoji in
-                                CardView(viewModel.cards[emoji])
+                            ForEach(viewModel.cards) { cards in
+                                CardView(cards)
+                                
                                     .aspectRatio(2/3, contentMode: .fit)
                                     .padding(5)
+                                    .animation(.default, value: viewModel.cards)
+                                    .onTapGesture {
+                                        viewModel.choose(cards)
+                                    }
                             }
                         }
                     }
                 }
-                
+                 
                 HStack {
                     Spacer()
                     
@@ -130,8 +135,7 @@ struct EmojiMemoryGameView: View {
                     .foregroundColor(.purple)
             }
             .frame(width: 80, height:100)
-            .animation(.easeInOut, value: card.isFaceUp)
-            
+            .opacity(card.isFaceUp || !card.ismatched ? 1:0)
         }
     }
     struct ThemeView: View {
