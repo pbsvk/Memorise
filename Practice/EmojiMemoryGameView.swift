@@ -11,6 +11,7 @@ struct EmojiMemoryGameView: View {
     @State var cardCount = 10
     var body: some View {
         GeometryReader {
+           
             geometry in
             
             VStack
@@ -61,36 +62,7 @@ struct EmojiMemoryGameView: View {
                         VStack {
                             Image(systemName:"soccerball")
                                 .font(.title)
-                            
-                        }
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                    
-                    
-                    Spacer()
-                    Button(action: {
-                        emojis_cur = emojis_2.shuffled()  // Switch to second View
-                        let generator = UIImpactFeedbackGenerator(style: .medium)
-                        generator.impactOccurred() // Trigger the haptic feedback
-                    }) {
-                        VStack {
-                            Image(systemName:"wand.and.rays")
-                                .font(.title)
-                            
-                        }
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                    
-                    Spacer()
-                    Button(action: {
-                        emojis_cur = emojis_3.shuffled()  // Switch to second View
-                        let generator = UIImpactFeedbackGenerator(style: .medium)
-                        generator.impactOccurred() // Trigger the haptic feedback
-                    }) {
-                        VStack {
-                            Image(systemName:"face.smiling")
-                                .font(.title)
-                            
+                            Text("New Game")
                         }
                     }
                     .buttonStyle(BorderlessButtonStyle())
