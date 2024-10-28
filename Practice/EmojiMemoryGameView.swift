@@ -33,6 +33,8 @@ struct EmojiMemoryGameView: View {
             HStack {
                 Button(action: {
                     viewModel.newGame()
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+                                impactFeedback.impactOccurred()
                 }, label: {
                     VStack(spacing: 5) {
                         Image(systemName: "plus.circle.fill").font(.largeTitle)
@@ -51,6 +53,8 @@ struct EmojiMemoryGameView: View {
                 
                 Button(action: {
                     viewModel.shuffle()
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                                impactFeedback.impactOccurred()
                 }, label: {
                     VStack(spacing: 5) {
                         Image(systemName: "shuffle.circle.fill").font(.largeTitle)
