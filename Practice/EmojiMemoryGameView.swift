@@ -81,41 +81,6 @@ struct EmojiMemoryGameView: View {
         .foregroundColor(viewModel.theme.color)
     }
 }
-
-struct CardView: View {
-    let card: MemoryGame<String>.Card
-    
-    init(_ card: MemoryGame<String>.Card) {
-        self.card = card
-    }
-    
-    var body: some View {
-        ZStack {
-            let base = RoundedRectangle(cornerRadius: 8)
-            Group {
-                base
-                    .fill(.white)
-                
-                base
-                    .strokeBorder(lineWidth: 8)
-                
-                Text(card.content)
-                    .font(.system(size: 50))
-                    .minimumScaleFactor(0.01)
-                    .aspectRatio(1, contentMode: .fit)
-            }
-            .opacity(card.isFaceUp ? 1:0)
-            base
-                .fill()
-                .opacity(card.isFaceUp ? 0:1)
-                .foregroundColor(.purple)
-        }
-        .frame(width: 80, height:100)
-        .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
-        
-    }
-}
-
 #Preview {
     EmojiMemoryGameView(viewModel: EmojiMemoryGame())
 }

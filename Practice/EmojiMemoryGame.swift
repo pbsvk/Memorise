@@ -22,7 +22,7 @@ class EmojiMemoryGame: ObservableObject {
     var cards: Array<MemoryGame<String>.Card> { model.cards }
     var score: Int { model.score }
     
-    // MARK: - Intents
+    // MARK: - Intents - //FIXME
     
     func shuffle() {
         model.shuffle()
