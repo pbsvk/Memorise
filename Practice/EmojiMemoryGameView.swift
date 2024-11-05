@@ -37,7 +37,7 @@ struct EmojiMemoryGameView: View {
                 .fontWeight(.heavy)
         }
     }
-    
+    //Re installed XCode
     // Add this computed property
     private var controlsView: some View {
         HStack {
